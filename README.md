@@ -1,10 +1,10 @@
 # How-to-enable-Intel-Xe-driver-on-Linux
-- A guide on how to enable the experimental Xe driver for Intel
+- A guide on how to enable the experimental Xe driver for Intel on linux.
 - I have tested this on a HP laptop with the Core i7 1165G7. 
 ## 1.Requirements
 - A terminal
 - The lspci command
-- A text editor of choice
+- A text editor of choice (kate, nano, mousepad, vim, etc)
 - Linux 6.8+ for the intel Xe driver. (Newer kernels will have better performance and or bug fixes)
 
 ## 2.Find out what driver you are using
@@ -12,7 +12,7 @@
 lspci -k -d ::03xx
 ```
 - k | show kernel driver information
-- d [vendor]:[device_class] | Only list devices whose PCI class is 03 (Display) and any subclass.
+- d [vendor]:[device_class] | Only list devices whose PCI class is 03 (Display) and any subclass
   - 03 = Display controller class (according to PCI class codes)
   - xx = “match any subclass” (wildcard for subclasses such as: 00 VGA controller, 80 3D controller, etc)
 
@@ -23,13 +23,13 @@ lspci -k -d ::03xx
         Kernel driver in use: i915
         Kernel modules: i915, xe
 ```
-- i915 is in use, i915 and xe are avaliable
+- i915 is in use, i915 and xe are avaliable.
 
 ## 3.Find out what PCI ID your gpu has
 ```
 lspci -nn | grep Xe
 ```
-- nn | Tells lspci to show both the human-readable name and the numeric PCI IDs
+- nn | Tells lspci to show both the human-readable name and the numeric PCI IDs.
 - Grep Xe shows only gpus with Xe in the name. Use without "| grep Xe" if you dont see anything.
 
 ### Example Output
@@ -46,7 +46,7 @@ xe.force_probe=<PCI ID>
 ```
 
 ### Open Grub config
-- i will use kate, but you can use sudo nano aswell:
+- i will use kate, but you can also use sudo nano:
 ```
 kate /etc/default/grub
 ```
