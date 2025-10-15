@@ -1,12 +1,13 @@
 # How-to-enable-Intel-Xe-driver-on-Linux
 - A guide on how to enable the experimental Xe driver for Intel
 - I have tested this on a HP laptop with the Core i7 1165G7. 
-## Reqiurements
+## 1.Reqiurements
 - A terminal
 - The lspci command
 - A text editor of choice
+- Linux 6.8+ for the intel Xe driver. (Newer kernels will have better performance and or bug fixes)
 
-## Find out what driver you are using
+## 2.Find out what driver you are using
 ```
 lspci -k -d ::03xx
 ```
@@ -24,7 +25,7 @@ lspci -k -d ::03xx
 ```
 - i915 is in use, i915 and xe are avaliable
 
-## Find out what PCI ID your gpu has
+## 3.Find out what PCI ID your gpu has
 ```
 lspci -nn | grep Xe
 ```
@@ -36,26 +37,47 @@ lspci -nn | grep Xe
 0000:00:02.0 VGA compatible controller [0300]: Intel Corporation TigerLake-LP GT2 [Iris Xe Graphics] [8086:9a49] (rev 01)
 ```
 - 9a49 is the PCIe ID
-## Add kernel boot parameter
+## 4.Add kernel boot parameter
 - Most distros use grub as there bootloader.
 - You will need to add theese kernel boot parameters to grub:
 ```
-i915.force_probe=!9a49
-xe.force_probe=9a49
+i915.force_probe=!<PCI ID>
+xe.force_probe=<PCI ID>
 ```
-REPLACE 9a49 WITH YOUR PCI ID!!!
+
 ### Open Grub config
-i will use kate, but you can use sudo nano aswell:
+- i will use kate, but you can use sudo nano aswell:
 ```
 kate /etc/default/grub
 ```
-Here you will change this line:
+- Here you will change this line:
 ```
 GRUB_CMDLINE_LINUX_DEFAULT="loglevel=4"
 ```
-"loglevel=4 is the defualt kernel parameter on Voidlinux.
-
-Change it to:
+and change it to:
 ```
 GRUB_CMDLINE_LINUX_DEFAULT="loglevel=4 i915.force_probe=!9a49 xe.force_probe=9a49"
 ```
+- Replace 9a49 with your PCI ID. 
+- "loglevel=4" is the defualt kernel parameter on Voidlinux.
+- "loglevel=4" symbolizes any previous kernel parameters. If you did not have any, there is no need to add loglevel=4.
+### Update grub
+```
+sudo update-grub
+```
+Check for any erros in the output. 
+## 5.Reboot to apply changes
+After a reboot, check what driver you are using again:
+```
+lspci -k -d ::03xx
+```
+It should look something like:
+```
+0000:00:02.0 VGA compatible controller: Intel Corporation TigerLake-LP GT2 [Iris Xe Graphics] (rev 01)
+        Subsystem: Hewlett-Packard Company Device 8820
+        Kernel driver in use: xe
+        Kernel modules: i915, xe
+```
+## Links to more Info
+- https://www.faceofit.com/intel-arc-iris-xe-linux-driver-compatibility-guide/
+- https://wiki.archlinux.org/title/Intel_graphics
