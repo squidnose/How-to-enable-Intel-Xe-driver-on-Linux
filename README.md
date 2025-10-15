@@ -1,6 +1,8 @@
+# THE Xe DRIVERS ARE EXPERIMENTAL AND MAY BREAK SOMETHING!!!
+I did not have any issues on Voidlinux with kernel 6.12 but other distros may vary. 
 # How-to-enable-Intel-Xe-driver-on-Linux
 - A guide on how to enable the experimental Xe driver for Intel on linux.
-- I have tested this on a HP laptop with the Core i7 1165G7. 
+- I have tested this on a HP laptop with the Core i7 1165G7.
 ## 1.Requirements
 - A terminal
 - The lspci command
